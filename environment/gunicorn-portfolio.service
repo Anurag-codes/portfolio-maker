@@ -1,0 +1,12 @@
+[Unit]
+Description=gunicorn daemon for portfolio
+After=network.target
+
+[Service]
+User=quickrpe
+Group=www-data
+WorkingDirectory=/home/quickrpe/portfolio/backend
+ExecStart=/home/quickrpe/portfolio/backend/venv/bin/gunicorn --workers 3 --bind unix:/home/quickrpe/portfolio/portfolio.sock portfolio_backend.wsgi:application
+
+[Install]
+WantedBy=multi-user.target

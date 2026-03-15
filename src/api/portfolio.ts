@@ -74,6 +74,9 @@ export interface PersonalProject {
 
 export interface PortfolioProfile {
   id?: number;
+  slug?: string;
+  custom_domain?: string;
+  username?: string;
   first_name: string;
   last_name: string;
   title_prefix: string;
@@ -114,6 +117,18 @@ export interface PortfolioProfile {
 // Public API
 export const fetchPortfolio = () =>
   client.get<PortfolioProfile>('/portfolio/').then((r) => r.data);
+
+/** Fetch a specific user's public portfolio by their slug (e.g. 'johndoe'). */
+export const fetchPortfolioBySlug = (slug: string) =>
+  client.get<PortfolioProfile>(`/portfolio/${slug}/`).then((r) => r.data);
+
+/**
+ * Fetch the portfolio that matches the current Host header.
+ * Used when the app runs on a subdomain (johndoe.dotdevz.com) or
+ * a custom domain (johndoe.com) — the server resolves the owner.
+ */
+export const fetchPortfolioByHost = () =>
+  client.get<PortfolioProfile>('/portfolio/by-host/').then((r) => r.data);
 
 // Auth
 export const login = (username: string, password: string) =>

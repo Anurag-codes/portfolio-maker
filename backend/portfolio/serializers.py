@@ -80,11 +80,14 @@ class PortfolioProfileSerializer(serializers.ModelSerializer):
     certifications = CertificationSerializer(many=True, read_only=True)
     achievements = AchievementSerializer(many=True, read_only=True)
     personal_projects = PersonalProjectSerializer(many=True, read_only=True)
+    # Expose the owner's username so the frontend can build the share link
+    username = serializers.SerializerMethodField()
 
     class Meta:
         model = PortfolioProfile
         fields = [
-            'id', 'first_name', 'last_name', 'title_prefix', 'title_option1',
+            'id', 'slug', 'custom_domain', 'username',
+            'first_name', 'last_name', 'title_prefix', 'title_option1',
             'title_option2', 'navbar_initials', 'about_text', 'email',
             'education', 'copyright_year', 'copyright_name',
             'github_url', 'linkedin_url', 'twitter_url', 'instagram_url',
@@ -99,6 +102,9 @@ class PortfolioProfileSerializer(serializers.ModelSerializer):
         ]
 
     resume_file_url = serializers.SerializerMethodField()
+
+    def get_username(self, obj):
+        return obj.user.username
 
     def get_resume_file_url(self, obj):
         request = self.context.get('request')
@@ -118,7 +124,8 @@ class PortfolioProfileWriteSerializer(serializers.ModelSerializer):
             'education', 'copyright_year', 'copyright_name',
             'github_url', 'linkedin_url', 'twitter_url', 'instagram_url',
             'resume_url', 'show_education', 'show_certifications', 'show_achievements',
-            'show_personal_projects',
+            'show_personal_projects', 'active_template', 'variant_career', 'variant_work',
+            'variant_techstack', 'techstack_brightness', 'custom_domain',
             'active_template', 'variant_career', 'variant_work', 'variant_techstack',
             'techstack_brightness',
         ]

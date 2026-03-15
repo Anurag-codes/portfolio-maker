@@ -1,0 +1,36 @@
+# ==============================================================================
+# Gunicorn systemd service for PortfolioCraft Django backend
+#
+# Install:
+#   sudo cp deploy/gunicorn.service /etc/systemd/system/gunicorn-portfolio.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable gunicorn-portfolio
+#   sudo systemctl start gunicorn-portfolio
+#
+# Logs:
+#   sudo journalctl -u gunicorn-portfolio -f
+# ==============================================================================
+
+[Unit]
+Description=gunicorn daemon for portfolio
+After=network.target
+
+[Service]
+User=quickrpe
+Group=www-data
+WorkingDirectory=/home/quickrpe/portfolio/backend
+
+# Load the .env file so Django picks up SECRET_KEY, MAIN_DOMAIN, etc.
+EnvironmentFile=/home/quickrpe/portfolio/backend/.env
+
+ExecStart=/home/quickrpe/portfolio/backend/venv/bin/gunicorn \
+    --workers 3 \
+    --bind unix:/home/quickrpe/portfolio/portfolio.sock \
+    --umask 007 \
+    portfolio_backend.wsgi:application
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

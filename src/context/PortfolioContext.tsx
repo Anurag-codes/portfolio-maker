@@ -5,7 +5,7 @@ import {
   useState,
   PropsWithChildren,
 } from 'react';
-import { fetchPortfolio, PortfolioProfile } from '../api/portfolio';
+import { fetchPortfolio, fetchPortfolioBySlug, fetchPortfolioByHost, PortfolioProfile } from '../api/portfolio';
 
 interface PortfolioContextType {
   data: PortfolioProfile | null;
@@ -204,13 +204,30 @@ export const PortfolioContext = createContext<PortfolioContextType>({
   error: null,
 });
 
-export const PortfolioProvider = ({ children }: PropsWithChildren) => {
+interface PortfolioProviderProps extends PropsWithChildren {
+  /**
+   * When set, fetches the portfolio for this specific slug instead of the
+   * default first-profile endpoint. Pass '__host__' to resolve by Host header
+   * (used for subdomain / custom-domain deployments).
+   */
+  slug?: string;
+}
+
+export const PortfolioProvider = ({ children, slug }: PortfolioProviderProps) => {
   const [data, setData] = useState<PortfolioProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchPortfolio()
+    let fetcher: Promise<PortfolioProfile>;
+    if (slug === '__host__') {
+      fetcher = fetchPortfolioByHost();
+    } else if (slug) {
+      fetcher = fetchPortfolioBySlug(slug);
+    } else {
+      fetcher = fetchPortfolio();
+    }
+    fetcher
       .then(setData)
       .catch(() => {
         // Fallback to default data when backend is not running
@@ -218,7 +235,7 @@ export const PortfolioProvider = ({ children }: PropsWithChildren) => {
         setError('Using default data — connect backend to load live data.');
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [slug]);
 
   return (
     <PortfolioContext.Provider value={{ data: data ?? DEFAULT, loading, error }}>

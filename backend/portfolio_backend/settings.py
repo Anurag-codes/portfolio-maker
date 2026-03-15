@@ -1,4 +1,5 @@
 import os
+import re
 from pathlib import Path
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -9,7 +10,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-this-in-production')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+# Main platform domain — used for wildcard ALLOWED_HOSTS and CORS.
+# Set MAIN_DOMAIN=portfolio.dotdevz.com in your .env (no http://, no trailing slash).
+# User subdomains will be alice.MAIN_DOMAIN (e.g. alice.portfolio.dotdevz.com).
+MAIN_DOMAIN = os.getenv('MAIN_DOMAIN', 'portfolio.dotdevz.com')
+
+# Build ALLOWED_HOSTS from env, then automatically include the main domain and
+# all its subdomains (Django interprets a leading-dot entry as a wildcard, e.g.
+# '.dotdevz.com' matches 'alice.dotdevz.com', 'bob.dotdevz.com', etc.).
+_raw_hosts = os.getenv('ALLOWED_HOSTS', f'localhost,127.0.0.1').split(',')
+_host_set: list[str] = [h.strip() for h in _raw_hosts if h.strip()]
+for _h in (MAIN_DOMAIN, f'www.{MAIN_DOMAIN}', f'.{MAIN_DOMAIN}'):
+    if _h not in _host_set:
+        _host_set.append(_h)
+ALLOWED_HOSTS = _host_set
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -57,6 +72,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'portfolio_backend.wsgi.application'
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'portfolio_db',
@@ -107,5 +126,10 @@ CORS_ALLOWED_ORIGINS = os.getenv(
     'CORS_ALLOWED_ORIGINS',
     'http://localhost:5173,http://localhost:4173'
 ).split(',')
+
+# Also allow any subdomain of the main domain (covers username.dotdevz.com)
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    rf'^https?://[^/]+\.{re.escape(MAIN_DOMAIN)}$',
+]
 
 CORS_ALLOW_CREDENTIALS = True

@@ -5,6 +5,11 @@ from django.contrib.auth.models import User
 class PortfolioProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='portfolio')
 
+    # Public slug — used for shareable URL /p/<slug> and subdomain <slug>.dotdevz.com
+    slug = models.SlugField(max_length=150, unique=True, blank=True, default='')
+    # Optional custom domain (e.g. "johndoe.com"). User adds a CNAME to your server.
+    custom_domain = models.CharField(max_length=253, blank=True, default='')
+
     # Landing section
     first_name = models.CharField(max_length=100, default='')
     last_name = models.CharField(max_length=100, default='')

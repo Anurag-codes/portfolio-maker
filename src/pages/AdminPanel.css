@@ -213,6 +213,154 @@
 
 .ap-form-actions { display: flex; gap: 0.75rem; }
 
+/* ─── Share banner ────────────────────────────────────────────────────────── */
+.ap-share-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: rgba(96, 165, 250, 0.08);
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.ap-share-banner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ap-share-banner-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.ap-share-url {
+  font-size: 0.9rem;
+  color: #60a5fa;
+  word-break: break-all;
+  text-decoration: none;
+}
+.ap-share-url:hover { text-decoration: underline; }
+
+/* ─── Field helpers ───────────────────────────────────────────────────────── */
+.ap-field-hint {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 400;
+  margin-left: 6px;
+}
+.ap-field-desc {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ─── Domain Help ─────────────────────────────────────────────────────────── */
+.ap-domain-help {
+  margin-top: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.ap-domain-help-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.04);
+  border: none;
+  color: #94a3b8;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+.ap-domain-help-toggle:hover { background: rgba(255,255,255,0.07); color: #cbd5e1; }
+
+.ap-domain-help-body {
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: rgba(0,0,0,0.15);
+}
+
+.ap-dh-section h4 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0 0 0.6rem;
+}
+.ap-dh-section h4 code { color: #60a5fa; }
+.ap-dh-section p, .ap-dh-section li { font-size: 0.84rem; color: #94a3b8; line-height: 1.6; }
+.ap-dh-section ol, .ap-dh-section ul {
+  margin: 0.4rem 0 0 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.ap-dh-section code {
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.82rem;
+  color: #bfdbfe;
+}
+
+.ap-dh-code {
+  display: block;
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  font-family: 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.8rem;
+  color: #86efac;
+  margin-top: 0.5rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.ap-dh-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+  font-size: 0.8rem;
+}
+.ap-dh-table th, .ap-dh-table td {
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 5px 10px;
+  text-align: left;
+  color: #94a3b8;
+}
+.ap-dh-table th { background: rgba(255,255,255,0.05); color: #cbd5e1; font-weight: 600; }
+.ap-dh-or { text-align: center; font-style: italic; color: #475569 !important; }
+
+.ap-dh-note {
+  margin-top: 0.75rem;
+  background: rgba(251,191,36,0.06);
+  border-left: 3px solid #fbbf24;
+  border-radius: 0 6px 6px 0;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  line-height: 1.55;
+}
+.ap-dh-note--tip {
+  background: rgba(52,211,153,0.06);
+  border-left-color: #34d399;
+}
+.ap-dh-note strong { color: #e2e8f0; }
+.ap-dh-note code   { background: rgba(255,255,255,0.08); border-radius: 4px; padding: 1px 5px; color: #bfdbfe; }
+
 /* ─── List sections ───────────────────────────────────────────────────────── */
 .ap-list-section { display: flex; flex-direction: column; gap: 1.25rem; }
 

@@ -1,0 +1,64 @@
+server {
+    server_name portfolio.dotdevz.com www.portfolio.dotdevz.com;
+
+    location ~ ^/.well-known {
+        root /home/quickrpe/portfolio;
+        allow all;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+        alias /home/quickrpe/portfolio/backend/staticfiles/;
+    }
+
+    location /media/ {
+        alias /home/quickrpe/portfolio/backend/media/;
+    }
+
+    location /api/ {
+        include proxy_params;
+        proxy_pass http://unix:/home/quickrpe/portfolio/portfolio.sock;
+    }
+
+    location /admin/ {
+        include proxy_params;
+        proxy_pass http://unix:/home/quickrpe/portfolio/portfolio.sock;
+    }
+
+    location / {
+        root /home/quickrpe/portfolio/dist;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+
+    client_max_body_size 20M;
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/portfolio.dotdevz.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/portfolio.dotdevz.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+
+}
+
+server {
+    if ($host = www.portfolio.dotdevz.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = portfolio.dotdevz.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name portfolio.dotdevz.com www.portfolio.dotdevz.com;
+    return 301 https://$host$request_uri;
+
+
+
+
+}

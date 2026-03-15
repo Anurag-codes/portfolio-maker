@@ -69,6 +69,127 @@ function TextPreview({ text, maxLen = 200 }: { text: string; maxLen?: number }) 
 // ─── Login ────────────────────────────────────────────────────────────────────
 // (Login is now handled by the dedicated /login page — see src/pages/Login.tsx)
 
+// ─── Domain Help ──────────────────────────────────────────────────────────────
+
+function DomainHelp({ slug }: { slug: string }) {
+  const [open, setOpen] = useState(false);
+  const platformDomain = import.meta.env.VITE_MAIN_DOMAIN || "dotdevz.com";
+
+  return (
+    <div className="ap-domain-help">
+      <button
+        type="button"
+        className="ap-domain-help-toggle"
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span>{open ? "▾" : "▸"}</span>
+        How to set up your domains
+      </button>
+
+      {open && (
+        <div className="ap-domain-help-body">
+
+          {/* ── Free subdomain ── */}
+          <section className="ap-dh-section">
+            <h4>① Free subdomain — <code>{slug || "username"}.{platformDomain}</code></h4>
+            <p>This is <strong>already active</strong>. No action needed.</p>
+            <ol>
+              <li>Your portfolio is live at exactly the URL shown in the banner above.</li>
+              <li>Share it directly — anyone who opens it sees only your portfolio.</li>
+            </ol>
+            <div className="ap-dh-note">
+              <strong>You (the admin)</strong> need to do this <strong>once</strong> on the server:
+              <code className="ap-dh-code">
+                # 1. DNS — add wildcard A record<br />
+                *.{platformDomain}  →  your-server-ip<br />
+                <br />
+                # 2. Nginx wildcard TLS cert (interactive — needs DNS TXT record)<br />
+                sudo bash deploy/setup-ssl.sh wildcard
+              </code>
+            </div>
+          </section>
+
+          {/* ── Custom domain ── */}
+          <section className="ap-dh-section">
+            <h4>② Custom domain — <code>johndoe.com</code></h4>
+            <p>Use your own domain to show <em>your portfolio only</em>. Three steps:</p>
+            <ol>
+              <li>
+                <strong>Enter your domain above</strong> (e.g. <code>johndoe.com</code>) and click
+                Save Profile.
+              </li>
+              <li>
+                <strong>Add a DNS record</strong> at your domain registrar / DNS provider:
+                <table className="ap-dh-table">
+                  <thead>
+                    <tr><th>Type</th><th>Name / Host</th><th>Value</th><th>TTL</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>CNAME</code></td>
+                      <td><code>@</code> <em>(or your domain)</em></td>
+                      <td><code>{platformDomain}</code></td>
+                      <td>Auto / 3600</td>
+                    </tr>
+                    <tr>
+                      <td colSpan={4} className="ap-dh-or">
+                        — or if your registrar doesn't allow CNAME at root —
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code>A</code></td>
+                      <td><code>@</code></td>
+                      <td><em>your-server-ip</em></td>
+                      <td>Auto / 3600</td>
+                    </tr>
+                  </tbody>
+                </table>
+                DNS changes propagate in minutes to 48 hours.
+              </li>
+              <li>
+                <strong>Add SSL for the domain</strong> — run this on the server:
+                <code className="ap-dh-code">
+                  sudo bash deploy/setup-ssl.sh add-custom johndoe.com
+                </code>
+                The script gets a free Let's Encrypt certificate and prints the nginx block to add.
+                Until that's done, browsers will show a certificate warning (self-signed fallback).
+              </li>
+            </ol>
+            <div className="ap-dh-note ap-dh-note--tip">
+              <strong>Using Cloudflare?</strong> If your domain is on Cloudflare, enable the
+              orange-cloud proxy. Cloudflare handles SSL automatically — skip step 3.
+              Just point the CNAME to <code>{platformDomain}</code> with the proxy turned on.
+            </div>
+          </section>
+
+          {/* ── How it works ── */}
+          <section className="ap-dh-section">
+            <h4>③ How it works (technical overview)</h4>
+            <ul>
+              <li>
+                <strong>Subdomain:</strong> Nginx's wildcard block <code>*.{platformDomain}</code>
+                catches the request. The frontend detects the subdomain and calls
+                <code>/api/portfolio/by-host/</code>, which resolves it to your profile.
+              </li>
+              <li>
+                <strong>Custom domain:</strong> Nginx catch-all block receives the request, passes
+                <code>Host: {platformDomain}</code> to Django (so <code>ALLOWED_HOSTS</code> always
+                passes) and sets <code>X-Custom-Domain: johndoe.com</code>. The Django view reads
+                that header and looks up the matching profile.
+              </li>
+              <li>
+                <strong>Routing is 100% automatic</strong> after the DNS record points to this
+                server. No code changes, no redeploy.
+              </li>
+            </ul>
+          </section>
+
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Profile Form ─────────────────────────────────────────────────────────────
 
 function ProfileForm({ profile }: { profile: PortfolioProfile }) {
@@ -83,8 +204,24 @@ function ProfileForm({ profile }: { profile: PortfolioProfile }) {
     email:            profile.email            ?? "",
     copyright_year:   profile.copyright_year   ?? "",
     copyright_name:   profile.copyright_name   ?? "",
+    custom_domain:    (profile.custom_domain   ?? "") as string,
   });
   const [saving, setSaving] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // Build the shareable portfolio URL
+  const portfolioSlug = profile.slug || profile.username || "";
+  const shareUrl = portfolioSlug
+    ? `${window.location.origin}/p/${portfolioSlug}`
+    : "";
+
+  const copyLink = () => {
+    if (!shareUrl) return;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   type FormKey = keyof typeof form;
 
@@ -120,6 +257,27 @@ function ProfileForm({ profile }: { profile: PortfolioProfile }) {
   return (
     <form className="ap-form" onSubmit={save}>
       <h2>Profile &amp; Landing</h2>
+
+      {/* ── Share link banner ── */}
+      {shareUrl && (
+        <div className="ap-share-banner">
+          <div className="ap-share-banner-info">
+            <span className="ap-share-banner-label">Your portfolio link</span>
+            <a
+              href={shareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ap-share-url"
+            >
+              {shareUrl}
+            </a>
+          </div>
+          <button type="button" className="ap-btn-primary ap-btn-sm" onClick={copyLink}>
+            {copied ? "Copied ✓" : "Copy Link"}
+          </button>
+        </div>
+      )}
+
       <div className="ap-form-grid">
         {field("First Name", "first_name", "text", "Rajesh", true)}
         {field("Last Name", "last_name", "text", "Chityal", true)}
@@ -142,6 +300,25 @@ function ProfileForm({ profile }: { profile: PortfolioProfile }) {
         {field("Copyright Year", "copyright_year", "text", "2025")}
         {field("Copyright Name", "copyright_name", "text", "Your Name")}
       </div>
+
+      {/* ── Custom domain ── */}
+      <div className="ap-field">
+        <label>Custom Domain <span className="ap-field-hint">(optional — e.g. johndoe.com)</span></label>
+        <input
+          type="text"
+          value={form.custom_domain}
+          onChange={(e) => change("custom_domain", e.target.value)}
+          placeholder="johndoe.com"
+        />
+        <p className="ap-field-desc">
+          Point your domain's DNS CNAME record to this server, enter the domain here, and your
+          portfolio will be served at that address automatically.
+        </p>
+      </div>
+
+      {/* ── Domain setup help ── */}
+      <DomainHelp slug={portfolioSlug} />
+
       <div className="ap-form-actions">
         <button type="submit" className="ap-btn-primary" disabled={saving}>
           {saving ? "Saving…" : "Save Profile"}
@@ -2030,7 +2207,19 @@ export default function AdminPanel() {
           ))}
         </nav>
         <div className="ap-sidebar-footer">
-          <button className="ap-btn-ghost ap-btn-sm" onClick={() => navigate("/portfolio")} style={{ marginBottom: "0.5rem" }}>
+          <button
+            className="ap-btn-ghost ap-btn-sm"
+            onClick={() =>
+              navigate(
+                profile?.slug
+                  ? `/p/${profile.slug}`
+                  : profile?.username
+                  ? `/p/${profile.username}`
+                  : "/portfolio"
+              )
+            }
+            style={{ marginBottom: "0.5rem" }}
+          >
             View Portfolio ↗
           </button>
           <button className="ap-btn-ghost ap-btn-sm" onClick={logout}>

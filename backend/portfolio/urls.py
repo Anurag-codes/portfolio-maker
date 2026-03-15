@@ -5,6 +5,8 @@ from . import views
 urlpatterns = [
     # Public
     path('portfolio/', views.public_portfolio, name='public-portfolio'),
+    path('portfolio/by-host/', views.public_portfolio_by_host, name='public-portfolio-by-host'),
+    path('portfolio/<slug:slug>/', views.public_portfolio_by_slug, name='public-portfolio-by-slug'),
 
     # Auth
     path('auth/register/', views.RegisterView.as_view(), name='register'),

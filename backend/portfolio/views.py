@@ -37,6 +37,62 @@ def public_portfolio(request):
         return Response({'detail': str(e)}, status=500)
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def public_portfolio_by_slug(request, slug):
+    """Return portfolio data for a specific user identified by their slug."""
+    try:
+        profile = PortfolioProfile.objects.get(slug=slug)
+    except PortfolioProfile.DoesNotExist:
+        return Response({'detail': 'Portfolio not found.'}, status=404)
+    serializer = PortfolioProfileSerializer(profile, context={'request': request})
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def public_portfolio_by_host(request):
+    """Return portfolio data matched by the Host header.
+
+    Supports two cases:
+      1. Subdomain  — e.g. alice.portfolio.dotdevz.com  (extract 'alice', match slug)
+      2. Custom domain — e.g. alice.com                 (match PortfolioProfile.custom_domain)
+    The main domain is read from the MAIN_DOMAIN env variable (default: portfolio.dotdevz.com).
+    """
+    import os
+    # X-Custom-Domain is set by nginx for the custom-domain catch-all block
+    # so that Django's ALLOWED_HOSTS always sees a trusted Host header, while
+    # the real hostname is still available for portfolio lookup.
+    host = (
+        request.META.get('HTTP_X_CUSTOM_DOMAIN')
+        or request.get_host()
+    ).split(':')[0].strip()
+    main_domain = os.getenv('MAIN_DOMAIN', 'portfolio.dotdevz.com')
+
+    profile = None
+
+    # Case 1 – subdomain of the main domain  (e.g. alice.portfolio.dotdevz.com)
+    if host.endswith('.' + main_domain):
+        slug = host[:-(len(main_domain) + 1)]
+        try:
+            profile = PortfolioProfile.objects.get(slug=slug)
+        except PortfolioProfile.DoesNotExist:
+            pass
+
+    # Case 2 – custom domain
+    if profile is None:
+        try:
+            profile = PortfolioProfile.objects.get(custom_domain=host)
+        except PortfolioProfile.DoesNotExist:
+            pass
+
+    if profile is None:
+        return Response({'detail': 'No portfolio found for this domain.'}, status=404)
+
+    serializer = PortfolioProfileSerializer(profile, context={'request': request})
+    return Response(serializer.data)
+
+
 # ─── Auth ─────────────────────────────────────────────────────────────────────
 
 class LoginView(TokenObtainPairView):
@@ -68,8 +124,10 @@ class RegisterView(APIView):
             password=password,
         )
         # Auto-create an empty portfolio profile so admin panel loads immediately
+        from django.utils.text import slugify
         PortfolioProfile.objects.create(
             user=user,
+            slug=slugify(username),
             first_name=username.upper(),
             last_name='',
             navbar_initials=username[:2].upper(),
