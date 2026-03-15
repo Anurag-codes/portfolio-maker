@@ -89,29 +89,29 @@ export class SplitText {
   }
 
   private _wrapLines(el: HTMLElement, linesClass: string) {
-    // Use rAF so layout is settled before measuring
-    requestAnimationFrame(() => {
-      const allSpans = Array.from(el.querySelectorAll<HTMLSpanElement>("span"));
-      if (!allSpans.length) return;
+    // Only select DIRECT child spans (word-level), never nested char spans
+    const directSpans = Array.from(el.children).filter(
+      (c): c is HTMLSpanElement => c.tagName === "SPAN"
+    );
+    if (!directSpans.length) return;
 
-      // Group spans by their rounded top Y
-      const buckets = new Map<number, HTMLSpanElement[]>();
-      allSpans.forEach((span) => {
-        const top = Math.round(span.getBoundingClientRect().top);
-        if (!buckets.has(top)) buckets.set(top, []);
-        buckets.get(top)!.push(span);
-      });
+    // Measure positions synchronously (before any GSAP transforms are applied)
+    const buckets = new Map<number, HTMLSpanElement[]>();
+    directSpans.forEach((span) => {
+      const top = Math.round(span.getBoundingClientRect().top);
+      if (!buckets.has(top)) buckets.set(top, []);
+      buckets.get(top)!.push(span);
+    });
 
-      // Wrap each line bucket in an overflow:hidden div
-      buckets.forEach((spans) => {
-        const lineEl = document.createElement("div");
-        lineEl.className = linesClass;
-        lineEl.style.overflow = "hidden";
-        const first = spans[0];
-        first.parentNode?.insertBefore(lineEl, first);
-        spans.forEach((s) => lineEl.appendChild(s));
-        this.lines.push(lineEl);
-      });
+    // Sort lines top-to-bottom and wrap each group
+    const sorted = [...buckets.entries()].sort((a, b) => a[0] - b[0]);
+    sorted.forEach(([, spans]) => {
+      const lineEl = document.createElement("div");
+      lineEl.className = linesClass;
+      const first = spans[0];
+      first.parentNode?.insertBefore(lineEl, first);
+      spans.forEach((s) => lineEl.appendChild(s));
+      this.lines.push(lineEl);
     });
   }
 

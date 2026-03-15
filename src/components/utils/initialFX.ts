@@ -79,56 +79,43 @@ export function initialFX() {
 }
 
 function LoopText(Text1: SplitText, Text2: SplitText) {
-  var tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-  const delay = 4;
-  const delay2 = delay * 2 + 1;
+  const HOLD    = 3.5;
+  const DUR     = 0.65;
+  const EASE    = "power3.inOut";
+  const STAGGER = 0.04;
 
-  tl.fromTo(
-    Text2.chars,
-    { opacity: 0, y: 80 },
-    {
-      opacity: 1,
-      duration: 1.2,
-      ease: "power3.inOut",
-      y: 0,
-      stagger: 0.1,
-      delay: delay,
-    },
-    0
-  )
-    .fromTo(
-      Text1.chars,
-      { y: 80 },
-      {
-        duration: 1.2,
-        ease: "power3.inOut",
-        y: 0,
-        stagger: 0.1,
-        delay: delay2,
-      },
-      1
-    )
-    .fromTo(
-      Text1.chars,
-      { y: 0 },
-      {
-        y: -80,
-        duration: 1.2,
-        ease: "power3.inOut",
-        stagger: 0.1,
-        delay: delay,
-      },
-      0
-    )
-    .to(
-      Text2.chars,
-      {
-        y: -80,
-        duration: 1.2,
-        ease: "power3.inOut",
-        stagger: 0.1,
-        delay: delay2,
-      },
-      1
-    );
+  // Text2 always starts hidden below its container
+  gsap.set(Text2.chars, { y: 80, opacity: 0 });
+
+  // Delay first cycle so Text1's entry animation can finish first
+  gsap.delayedCall(1.5, runCycle);
+
+  function runCycle() {
+    gsap.timeline()
+      // swap 1: Text1 exits up, Text2 slides in from below
+      .to(Text1.chars, {
+        y: -80, opacity: 0,
+        duration: DUR, stagger: STAGGER, ease: EASE,
+        delay: HOLD,
+      })
+      .to(Text2.chars, {
+        y: 0, opacity: 1,
+        duration: DUR, stagger: STAGGER, ease: EASE,
+      }, "<")
+      // silently reposition Text1 below, ready for re-entry
+      .set(Text1.chars, { y: 80, opacity: 0 })
+      // swap 2: Text2 exits up, Text1 slides back in from below
+      .to(Text2.chars, {
+        y: -80, opacity: 0,
+        duration: DUR, stagger: STAGGER, ease: EASE,
+        delay: HOLD,
+      })
+      .to(Text1.chars, {
+        y: 0, opacity: 1,
+        duration: DUR, stagger: STAGGER, ease: EASE,
+      }, "<")
+      // silently reposition Text2 below for next cycle
+      .set(Text2.chars, { y: 80, opacity: 0 })
+      .call(runCycle);
+  }
 }
