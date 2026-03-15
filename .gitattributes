@@ -1,0 +1,25 @@
+# Force LF line endings in the repo for all text files
+* text=auto eol=lf
+
+# Shell scripts must always be LF (will break on Linux if CRLF)
+*.sh text eol=lf
+
+# Windows batch files use CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files — no line ending conversion
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.svg binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.hdr binary
+*.enc binary
+*.sqlite3 binary

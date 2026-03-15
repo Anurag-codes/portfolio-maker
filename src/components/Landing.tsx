@@ -1,7 +1,10 @@
 import { PropsWithChildren } from "react";
 import "./styles/Landing.css";
+import { usePortfolio } from "../context/PortfolioContext";
 
 const Landing = ({ children }: PropsWithChildren) => {
+  const { data } = usePortfolio();
+
   return (
     <>
       <div className="landing-section" id="landingDiv">
@@ -9,20 +12,20 @@ const Landing = ({ children }: PropsWithChildren) => {
           <div className="landing-intro">
             <h2>Hello! I'm</h2>
             <h1>
-              RAJESH
+              {data?.first_name?.toUpperCase()}
               <br />
-              <span>CHITYAL</span>
+              <span>{data?.last_name?.toUpperCase()}</span>
             </h1>
           </div>
           <div className="landing-info">
-            <h3>A Full Stack</h3>
+            <h3>{data?.title_prefix}</h3>
             <h2 className="landing-info-h2">
-              <div className="landing-h2-1">Developer</div>
-              <div className="landing-h2-2">Engineer</div>
+              <div className="landing-h2-1">{data?.title_option1}</div>
+              <div className="landing-h2-2">{data?.title_option2}</div>
             </h2>
             <h2>
-              <div className="landing-h2-info">Engineer</div>
-              <div className="landing-h2-info-1">Developer</div>
+              <div className="landing-h2-info">{data?.title_option2}</div>
+              <div className="landing-h2-info-1">{data?.title_option1}</div>
             </h2>
           </div>
         </div>

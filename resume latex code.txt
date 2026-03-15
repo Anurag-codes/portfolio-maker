@@ -1,0 +1,120 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.9in,right=0.9in,top=0.8in,bottom=0.8in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{titlesec}
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textbf{ANURAG}}\\
+New Delhi, India \\
+Email: \href{mailto:anuragk5132@gmail.com}{anuragk5132@gmail.com} | Phone: +91-7011097759
+\end{center}
+
+\section*{PROFESSIONAL SUMMARY}
+Senior Software Developer with \textbf{6 years of experience} architecting, building, and scaling Java-based enterprise systems in banking and fintech domains. Expert in Spring Boot, microservices, high-performance REST APIs, and cloud-integrated applications. Demonstrated ability to lead technical initiatives, improve system reliability, optimize performance, and mentor team in Agile environments.
+
+\section*{CORE SKILLS}
+\begin{itemize}
+\item \textbf{Languages:} Java (7/8/11/17), Python, C, JavaScript
+\item \textbf{Backend:} Spring Boot 3, Microservices, REST APIs, JPA, Hibernate, Django
+\item \textbf{Frontend:} Angular (17), JavaScript, HTML5, CSS3, Bootstrap
+\item \textbf{Cloud \& DevOps:} AWS, API Gateway, Load Balancer, Docker, PCF, VPS
+\item \textbf{Messaging \& Streaming:} Apache Kafka
+\item \textbf{Databases:} MySQL, PostgreSQL, Oracle, MongoDB
+\item \textbf{Monitoring \& Observability:} Prometheus, Grafana, Spring Boot Actuator
+\item \textbf{Tools:} Git, GitHub, Maven, Postman, Confluence, Linux, GitHub Copilot
+\item \textbf{AI/Developer Productivity:} Agentic AI-assisted development, Prompt Engineering, Multi-model AI workflows, Claude Sonnet 4.6, GitHub Copilot, AI-assisted code generation, debugging and documentation.
+\item \textbf{Testing:} JUnit5, Mockito, Integration Testing
+\item \textbf{Methodologies:} Agile, System Design
+\item \textbf{Other Skills:} Analytical Thinking \& Planning, Troubleshooting, Problem Solving and Interpersonal Communication
+\end{itemize}
+
+\section*{PROFESSIONAL EXPERIENCE}
+
+\textbf{FISERV INDIA PRIVATE LIMITED, Noida} \hfill Apr 2022 -- Present\\
+\textit{Software Development Engineer, Professional}
+
+\textbf{Product: Signature NextGen (Core Banking Platform)}
+
+\begin{itemize}
+\item Developed scalable Spring Boot microservices for core banking systems handling high transaction volumes across retail and corporate banking accounts.
+\item Designed and optimized REST APIs that reduced response time by 30\% and improved system reliability.
+\item Participated in system design discussions for microservice-based banking applications, focusing on scalability, fault tolerance, and maintainable service architecture.
+\item Diagnosed and resolved production issues including thread contention and performance bottlenecks through thread optimization and efficient resource management.
+\item Implemented monitoring and observability using Prometheus and Grafana dashboards along with Spring Boot Actuator for service health checks and performance metrics.
+\item Proactively monitored application performance and system health to ensure high availability and reliability of banking services.
+
+\item Built reusable Angular components using RxJS to improve performance and maintainability.
+\item Integrated frontend applications with backend microservices for seamless user experience.
+\item Collaborated with designers, Frontend Developers and QA team in Agile environment and delivered 4 major releases on schedule.
+\item Leveraged AI-assisted development using GitHub Copilot with multiple LLM models including Claude Sonnet 4.6 to accelerate development, generate boilerplate code, optimize SQL queries, and assist in debugging complex microservice issues.
+\item Implemented agentic AI workflows for developer productivity by using prompt-driven code generation, API contract drafting, and documentation generation, improving development efficiency and reducing manual effort during feature implementation.
+\item Utilized AI tools to assist in generating unit tests, refactoring legacy code, and exploring architectural approaches during microservice development.
+\item Automated 8+ manual operational tasks of building microservices using Bash scripts, saving approximately 20 hours per month.
+\item Conducted code reviews and provided guidance to junior developers.
+\item Implemented unit and integration tests using JUnit and Mockito on microservice side and MockAPI's on frontend side.
+\item Managed source code using Git and GitHub
+\item Trained and supported new team members during project onboarding.
+\item Demonstrated ability to lead technical initiatives, improve system reliability, optimize performance, mentor teams in Agile environments, and leverage AI-assisted development tools to accelerate engineering productivity.
+\end{itemize}
+
+\par\noindent   % �� CRITICAL LINE — resets indentation
+\vspace{0pt} 
+\textbf{NEWGEN SOFTWARES LIMITED, Noida} \hfill Sep 2021 -- Apr 2022\\
+\textit{Software Engineer}
+
+\textbf{Project: Invoice Discounting System}
+
+\begin{itemize}
+\item Maintained SOAP-based web services for invoice processing workflows.
+\item Implemented error handling and transaction management in service layers.
+\item Integrated invoice validation, approval, and settlement modules.
+\item Worked closely with clients to gather and refine requirements.
+\end{itemize}
+
+\par\noindent   % �� CRITICAL LINE — resets indentation
+\vspace{0pt} 
+\textbf{TATA CONSULTANCY SERVICES} \hfill Jul 2019 -- Sep 2021\\
+\textit{Assistant System Engineer}
+
+\textbf{Project: TCS BANCS – Capital Markets}
+
+\begin{itemize}
+\item Developed Java-based interfaces for stock announcements.
+\item Worked on user interaction modules for capital market operations.
+\item Utilized Oracle Database and designed complex SQL queries.
+\item Designed Bash/Unix shell scripts to automate manual tasks.
+\item Debugged and resolved issues across development and UAT environments.
+\end{itemize}
+
+\section*{EDUCATION}
+\textbf{B.Tech (Electronics \& Communication)}\\
+Northern India Engineering College(GGSIPU), Delhi -- 2019 \hfill Aggregate: 77\%\\\\
+\textbf{Higher Secondary 12th (CBSE)}\\
+New Delhi Convent School(CBSE), Delhi -- 2015 \hfill Aggregate: 63.8\%\\\\
+\textbf{Secondary 10th (CBSE)}\\
+Oxford Senior Secondary School(CBSE), Delhi -- 2013 \hfill Aggregate: 70\%\\
+
+\section*{CERTIFICATIONS}
+\begin{itemize}
+\item C++ Certification – IIT Kharagpur
+\item Data Structures \& Algorithms in Java
+\item Full Stack Web Development \& Machine Learning – Udemy
+\end{itemize}
+
+\section*{ACHIEVEMENTS}
+\begin{itemize}
+\item Published research paper on ``Text Extraction from Digital Images''  in International Journal of Recent Research Aspects( ISSN:2349-7688, Vol.5.).
+\item Secured 1st Rank in DSA based Code Rank programming competition.
+\item Designed and deployed an E-commerce application using Django and PostgreSQL on VPS(Internship).
+\item BANCS project in TCS (professional).
+\item Invoice discounting in NEWGEN (professional).
+\item  Signature International and Signature NextGen in Fiserv India Private Limited (professional)
+\end{itemize}
+\section*{DECLARATION}
+I hereby declare that the above information correctly describes me and my qualification to best of my knowledge
+\end{document}

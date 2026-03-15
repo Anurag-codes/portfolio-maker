@@ -1,0 +1,122 @@
+.achievements-section {
+  width: 100%;
+  padding: 100px 0 80px;
+  background: var(--backgroundColor);
+}
+
+.achievements-inner {
+  width: var(--cWidth);
+  margin: 0 auto;
+}
+
+.achievements-heading-wrap {
+  margin-bottom: 60px;
+}
+
+.achievements-sub {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accentColor);
+  margin: 0 0 12px;
+  opacity: 0.8;
+}
+
+.achievements-heading {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(0deg, var(--accentColorDark, #0d9488), #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+
+.achievements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.achievement-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  padding: 32px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.3s ease;
+}
+
+.achievement-item:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.achievement-item:hover .achievement-num {
+  -webkit-text-fill-color: var(--accentColor);
+  background: linear-gradient(135deg, var(--accentColor), var(--accentSecondary, #8b5cf6));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.achievement-item:hover .achievement-line {
+  width: 40px;
+  background: linear-gradient(90deg, var(--accentColor), #8b5cf6);
+}
+
+.achievement-num {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+  color: transparent;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  flex-shrink: 0;
+  min-width: 64px;
+  transition: color 0.3s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.achievement-content {
+  padding-top: 8px;
+  flex: 1;
+}
+
+.achievement-line {
+  width: 24px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  margin-bottom: 14px;
+  transition: width 0.35s ease, background 0.35s ease;
+}
+
+.achievement-text {
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.achievement-item:hover .achievement-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 640px) {
+  .achievements-section {
+    padding: 70px 0 60px;
+  }
+
+  .achievement-item {
+    gap: 16px;
+    padding: 24px 0;
+  }
+
+  .achievement-num {
+    min-width: 44px;
+    font-size: 1.8rem;
+  }
+}

@@ -8,7 +8,7 @@
   line-height: 1.5;
   scroll-behavior: smooth;
   color-scheme: light dark;
-  color: #eae5ec;
+  color: var(--textPrimary, #eae5ec);
   background-color: var(--backgroundColor);
 
   font-synthesis: none;
@@ -19,6 +19,8 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   --accentColor: #5eead4;
+  --accentColorDark: #0d9488;
+  --accentSecondary: #818cf8;
   --backgroundColor: #0a0e17;
   --vh: 100vh;
   --vh: 100svh;
@@ -36,6 +38,9 @@ h6 {
 body {
   overflow: hidden;
 }
+
+/* Portfolio page GSAP ScrollSmoother uses its own wrapper for overflow */
+/* Home and Admin pages override this via useEffect in their components */
 
 a {
   color: inherit;

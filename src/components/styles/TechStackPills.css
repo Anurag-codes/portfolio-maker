@@ -1,0 +1,70 @@
+.tsp-section {
+  background: var(--backgroundColor);
+  padding: 80px 0 100px;
+}
+
+.tsp-inner {
+  margin: auto;
+}
+
+.tsp-heading {
+  font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+  font-weight: 500;
+  margin: 0 0 60px;
+}
+
+.tsp-heading span {
+  color: var(--accentColor);
+}
+
+/* ── Pills container ── */
+.tsp-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+/* ── Individual pill ── */
+.tsp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 9px 18px;
+  border-radius: 100px;
+  border: 1px solid hsl(var(--pill-hue, 180), 60%, 45%, 0.35);
+  background: hsl(var(--pill-hue, 180), 60%, 45%, 0.07);
+  color: hsl(var(--pill-hue, 180), 70%, 72%);
+  letter-spacing: 0.02em;
+  cursor: default;
+  transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  user-select: none;
+}
+
+.tsp-pill:hover {
+  background: hsl(var(--pill-hue, 180), 60%, 45%, 0.18);
+  border-color: hsl(var(--pill-hue, 180), 70%, 60%, 0.7);
+  transform: translateY(-3px) scale(1.04);
+}
+
+/* ── Optional small logo inside pill ── */
+.tsp-pill-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(1.2) saturate(0.8);
+}
+
+@media (max-width: 640px) {
+  .tsp-section {
+    padding: 60px 0 70px;
+  }
+
+  .tsp-pill {
+    font-size: 0.82rem;
+    padding: 7px 14px;
+  }
+}

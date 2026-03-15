@@ -8,8 +8,10 @@ import "./styles/SocialIcons.css";
 import { TbNotes } from "react-icons/tb";
 import { useEffect } from "react";
 import HoverLinks from "./HoverLinks";
+import { usePortfolio } from "../context/PortfolioContext";
 
 const SocialIcons = () => {
+  const { data } = usePortfolio();
   useEffect(() => {
     const social = document.getElementById("social") as HTMLElement;
 
@@ -59,28 +61,36 @@ const SocialIcons = () => {
   return (
     <div className="icons-section">
       <div className="social-icons" data-cursor="icons" id="social">
-        <span>
-          <a href="https://github.com/rajeshchityal" target="_blank">
-            <FaGithub />
-          </a>
-        </span>
-        <span>
-          <a href="https://www.linkedin.com/in/rajeshchityal" target="_blank">
-            <FaLinkedinIn />
-          </a>
-        </span>
-        <span>
-          <a href="https://x.com/rajeshchityal" target="_blank">
-            <FaXTwitter />
-          </a>
-        </span>
-        <span>
-          <a href="https://www.instagram.com/rajeshchityal" target="_blank">
-            <FaInstagram />
-          </a>
-        </span>
+        {data?.github_url && (
+          <span>
+            <a href={data.github_url} target="_blank">
+              <FaGithub />
+            </a>
+          </span>
+        )}
+        {data?.linkedin_url && (
+          <span>
+            <a href={data.linkedin_url} target="_blank">
+              <FaLinkedinIn />
+            </a>
+          </span>
+        )}
+        {data?.twitter_url && (
+          <span>
+            <a href={data.twitter_url} target="_blank">
+              <FaXTwitter />
+            </a>
+          </span>
+        )}
+        {data?.instagram_url && (
+          <span>
+            <a href={data.instagram_url} target="_blank">
+              <FaInstagram />
+            </a>
+          </span>
+        )}
       </div>
-      <a className="resume-button" href="#">
+      <a className="resume-button" href={data?.resume_url || '#'} target="_blank">
         <HoverLinks text="RESUME" />
         <span>
           <TbNotes />

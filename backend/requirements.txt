@@ -1,0 +1,14 @@
+Django==4.2.16
+djangorestframework==3.15.2
+djangorestframework-simplejwt==5.3.1
+django-cors-headers==4.4.0
+# Pillow is optional - only needed for image upload validation (ImageField)
+# For Windows local testing, image_url fields are used instead
+# Install with: pip install Pillow --only-binary :all:
+# Pillow==10.4.0
+python-dotenv==1.0.1
+whitenoise==6.7.0
+gunicorn==22.0.0
+# Resume parsing & PDF generation
+pdfplumber==0.11.4
+reportlab==4.2.5
