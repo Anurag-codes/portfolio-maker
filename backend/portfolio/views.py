@@ -398,9 +398,13 @@ class ResumeGenerateView(APIView):
         if fmt not in ('pdf', 'latex'):
             return Response({'detail': 'format must be "pdf" or "latex".'}, status=400)
 
-        profile = PortfolioProfile.objects.prefetch_related(
-            'career_entries', 'projects', 'techstack_images'
-        ).get(user=request.user)
+        try:
+            profile = PortfolioProfile.objects.prefetch_related(
+                'career_entries', 'projects', 'techstack_images',
+                'education_entries', 'certifications', 'achievements', 'personal_projects'
+            ).get(user=request.user)
+        except PortfolioProfile.DoesNotExist:
+            return Response({'detail': 'No portfolio profile found.'}, status=404)
 
         data = profile_to_resume_data(profile)
         name_slug = (data.get('name') or 'resume').replace(' ', '_').lower()

@@ -28,13 +28,20 @@ const MainContainer = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
+    let resizeTimer: ReturnType<typeof setTimeout>;
     const resizeHandler = () => {
-      setSplitText();
-      setIsDesktopView(window.innerWidth > 1024);
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        setSplitText();
+        setIsDesktopView(window.innerWidth > 1024);
+      }, 150);
     };
-    resizeHandler();
+    // Run immediately (no debounce on first mount)
+    setSplitText();
+    setIsDesktopView(window.innerWidth > 1024);
     window.addEventListener("resize", resizeHandler);
     return () => {
+      clearTimeout(resizeTimer);
       window.removeEventListener("resize", resizeHandler);
     };
   }, [isDesktopView]);

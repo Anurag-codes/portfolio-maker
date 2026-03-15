@@ -8,7 +8,7 @@ export default function PersonalProjects() {
 
   return (
     <section className="pp-section" id="personal-projects">
-      <div className="pp-inner">
+      <div className="pp-inner section-container">
         <div className="pp-heading-wrap">
           <p className="pp-sub">What I've Built</p>
           <h2 className="pp-heading">Projects</h2>

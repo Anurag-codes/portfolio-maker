@@ -732,12 +732,39 @@ def profile_to_resume_data(profile) -> dict:
             "description": entry.description,
         })
 
+    # Education from EducationEntry objects (falls back to profile.education CharField)
+    edu_lines = []
+    for edu in profile.education_entries.all().order_by("order"):
+        line = edu.degree
+        if edu.institution:
+            line += f" — {edu.institution}"
+        if edu.year:
+            line += f" ({edu.year})"
+        if edu.grade:
+            line += f", {edu.grade}"
+        edu_lines.append(line)
+    education_str = "\n".join(edu_lines) if edu_lines else profile.education
+
+    # Certifications from Certification model
+    certifications = []
+    for cert in profile.certifications.all().order_by("order"):
+        cert_str = cert.title
+        if cert.issuer:
+            cert_str += f" — {cert.issuer}"
+        if cert.year:
+            cert_str += f" ({cert.year})"
+        certifications.append(cert_str)
+
+    # Achievements from Achievement model; fall back to PersonalProject list
     achievements = []
-    for proj in profile.projects.all().order_by("order"):
-        ach = proj.title
-        if proj.tools:
-            ach += f" — {proj.tools}"
-        achievements.append(ach)
+    for ach in profile.achievements.all().order_by("order"):
+        achievements.append(ach.text)
+    if not achievements:
+        for proj in profile.personal_projects.all().order_by("order"):
+            ach_str = proj.title
+            if proj.tech_stack:
+                ach_str += f" — {', '.join(proj.tech_stack)}"
+            achievements.append(ach_str)
 
     return {
         "name": name,
@@ -749,7 +776,7 @@ def profile_to_resume_data(profile) -> dict:
         "summary": profile.about_text,
         "skills": skills,
         "experience": experience,
-        "education": profile.education,
-        "certifications": [],
+        "education": education_str,
+        "certifications": certifications,
         "achievements": achievements,
     }

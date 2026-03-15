@@ -8,7 +8,7 @@ export default function Education() {
 
   return (
     <section className="education-section" id="education">
-      <div className="education-inner">
+      <div className="education-inner section-container">
         <div className="education-heading-wrap">
           <p className="education-sub">Academic Background</p>
           <h2 className="education-heading">Education</h2>

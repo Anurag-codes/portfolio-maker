@@ -151,7 +151,10 @@ const TechStack = () => {
         shadows
         camera={{ position: [0, 9, 22], fov: 44, near: 1, far: 200 }}
         gl={{ alpha: true, antialias: true }}
-        onCreated={(state) => (state.gl.toneMappingExposure = 1.0 + brightness * 0.4)}
+        onCreated={(state) => {
+          state.gl.toneMappingExposure = 1.0 + brightness * 0.4;
+          state.camera.lookAt(0, -3, 0);
+        }}
         className="tech-canvas"
       >
         <ambientLight intensity={0.25} />

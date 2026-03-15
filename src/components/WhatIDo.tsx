@@ -30,11 +30,9 @@ const WhatIDo = () => {
   return (
     <div className="whatIDO">
       <div className="what-box">
-        <h2 className="title">
-          W<span className="hat-h2">HAT</span>
-          <div>
-            I<span className="do-h2"> DO</span>
-          </div>
+        <h2 className="what-heading">
+          W<span className="hat-h2">HAT</span> I
+          <span className="what-do-line"><span className="do-h2">DO</span></span>
         </h2>
       </div>
       <div className="what-box">

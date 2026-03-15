@@ -74,17 +74,19 @@ export function initialFX() {
   var landingText4 = new SplitText(".landing-h2-1", TextProps);
   var landingText5 = new SplitText(".landing-h2-2", TextProps);
 
-  LoopText(landingText2, landingText3);
-  LoopText(landingText4, landingText5);
+  LoopText(landingText2, landingText3, ".landing-h2-info-1");
+  LoopText(landingText4, landingText5, ".landing-h2-2");
 }
 
-function LoopText(Text1: SplitText, Text2: SplitText) {
+function LoopText(Text1: SplitText, Text2: SplitText, text2Selector?: string) {
   const HOLD    = 3.5;
   const DUR     = 0.65;
   const EASE    = "power3.inOut";
   const STAGGER = 0.04;
 
-  // Text2 always starts hidden below its container
+  // Reveal the Text2 wrapper (CSS opacity:0 prevents initial flash; GSAP must override it)
+  if (text2Selector) gsap.set(text2Selector, { opacity: 1 });
+  // Text2 chars start hidden below their container — GSAP controls the reveal
   gsap.set(Text2.chars, { y: 80, opacity: 0 });
 
   // Delay first cycle so Text1's entry animation can finish first

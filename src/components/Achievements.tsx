@@ -8,7 +8,7 @@ export default function Achievements() {
 
   return (
     <section className="achievements-section" id="achievements">
-      <div className="achievements-inner">
+      <div className="achievements-inner section-container">
         <div className="achievements-heading-wrap">
           <p className="achievements-sub">Milestones</p>
           <h2 className="achievements-heading">Achievements</h2>

@@ -12,9 +12,9 @@ const Landing = ({ children }: PropsWithChildren) => {
           <div className="landing-intro">
             <h2>Hello! I'm</h2>
             <h1>
-              {data?.first_name?.toUpperCase()}
-              <br />
-              <span>{data?.last_name?.toUpperCase()}</span>
+              {data?.first_name.toUpperCase()}
+              &ensp;
+              {data?.last_name.toUpperCase()}
             </h1>
           </div>
           <div className="landing-info">

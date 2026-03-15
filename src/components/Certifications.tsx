@@ -8,7 +8,7 @@ export default function Certifications() {
 
   return (
     <section className="certs-section" id="certifications">
-      <div className="certs-inner">
+      <div className="certs-inner section-container">
         <div className="certs-heading-wrap">
           <p className="certs-sub">Verified Skills</p>
           <h2 className="certs-heading">Certifications</h2>

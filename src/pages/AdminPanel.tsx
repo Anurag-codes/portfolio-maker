@@ -104,14 +104,15 @@ function ProfileForm({ profile }: { profile: PortfolioProfile }) {
     }
   };
 
-  const field = (label: string, key: FormKey, type = "text", placeholder = "") => (
+  const field = (label: string, key: FormKey, type = "text", placeholder = "", required = false) => (
     <div className="ap-field" key={key}>
-      <label>{label}</label>
+      <label>{label}{required && <span className="ap-required">*</span>}</label>
       <input
         type={type}
         value={(form[key] as string) ?? ""}
         onChange={(e) => change(key, e.target.value)}
         placeholder={placeholder}
+        required={required}
       />
     </div>
   );
@@ -120,15 +121,15 @@ function ProfileForm({ profile }: { profile: PortfolioProfile }) {
     <form className="ap-form" onSubmit={save}>
       <h2>Profile &amp; Landing</h2>
       <div className="ap-form-grid">
-        {field("First Name", "first_name", "text", "Rajesh")}
-        {field("Last Name", "last_name", "text", "Chityal")}
+        {field("First Name", "first_name", "text", "Rajesh", true)}
+        {field("Last Name", "last_name", "text", "Chityal", true)}
         {field("Title Prefix", "title_prefix", "text", "A Full Stack")}
-        {field("Title Option 1", "title_option1", "text", "Developer")}
-        {field("Title Option 2", "title_option2", "text", "Engineer")}
+        {field("Title Option 1", "title_option1", "text", "Developer", true)}
+        {field("Title Option 2", "title_option2", "text", "Engineer", true)}
         {field("Navbar Initials", "navbar_initials", "text", "RC")}
       </div>
       <div className="ap-field">
-        <label>About Text</label>
+        <label>About Text <span className="ap-required">*</span></label>
         <textarea
           value={form.about_text ?? ""}
           onChange={(e) => change("about_text", e.target.value)}
@@ -137,7 +138,7 @@ function ProfileForm({ profile }: { profile: PortfolioProfile }) {
         />
       </div>
       <div className="ap-form-grid">
-        {field("Email", "email", "email", "you@example.com")}
+        {field("Email", "email", "email", "you@example.com", true)}
         {field("Copyright Year", "copyright_year", "text", "2025")}
         {field("Copyright Name", "copyright_name", "text", "Your Name")}
       </div>
@@ -220,15 +221,15 @@ function CareerForm() {
           <h3>{editId === "new" ? "New Entry" : "Edit Entry"}</h3>
           <div className="ap-form-grid">
             <div className="ap-field">
-              <label>Role</label>
+              <label>Role <span className="ap-required">*</span></label>
               <input value={form.role} onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))} placeholder="Full Stack Developer" required />
             </div>
             <div className="ap-field">
-              <label>Company</label>
+              <label>Company <span className="ap-required">*</span></label>
               <input value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} placeholder="Company Name" required />
             </div>
             <div className="ap-field">
-              <label>Year</label>
+              <label>Year <span className="ap-required">*</span></label>
               <input value={form.year} onChange={(e) => setForm((f) => ({ ...f, year: e.target.value }))} placeholder="2023 or NOW" required />
             </div>
             <div className="ap-field">
@@ -237,7 +238,7 @@ function CareerForm() {
             </div>
           </div>
           <div className="ap-field">
-            <label>Description</label>
+            <label>Description <span className="ap-required">*</span></label>
             <textarea value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} rows={3} placeholder="Describe your role and achievements..." required />
           </div>
           <div className="ap-form-actions">
@@ -352,15 +353,15 @@ function ProjectsForm() {
           <h3>{editId === "new" ? "New Project" : "Edit Project"}</h3>
           <div className="ap-form-grid">
             <div className="ap-field">
-              <label>Title</label>
+              <label>Title <span className="ap-required">*</span></label>
               <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Project Name" required />
             </div>
             <div className="ap-field">
-              <label>Category</label>
+              <label>Category <span className="ap-required">*</span></label>
               <input value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} placeholder="E-Commerce, CRM…" required />
             </div>
             <div className="ap-field">
-              <label>Tools &amp; Features</label>
+              <label>Tools &amp; Features <span className="ap-required">*</span></label>
               <input value={form.tools} onChange={(e) => setForm((f) => ({ ...f, tools: e.target.value }))} placeholder="React.js, NestJS, MongoDB" required />
             </div>
             <div className="ap-field">
@@ -493,11 +494,11 @@ function WhatIDoForm() {
           <h3>{editId === "new" ? "New Section" : "Edit Section"}</h3>
           <div className="ap-form-grid">
             <div className="ap-field">
-              <label>Category (e.g. FRONTEND)</label>
+              <label>Category (e.g. FRONTEND) <span className="ap-required">*</span></label>
               <input value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} placeholder="FRONTEND" required />
             </div>
             <div className="ap-field">
-              <label>Subtitle</label>
+              <label>Subtitle <span className="ap-required">*</span></label>
               <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Building Interactive UIs" required />
             </div>
             <div className="ap-field">
@@ -506,7 +507,7 @@ function WhatIDoForm() {
             </div>
           </div>
           <div className="ap-field">
-            <label>Description</label>
+            <label>Description <span className="ap-required">*</span></label>
             <textarea value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} rows={3} required />
           </div>
           <div className="ap-field">
@@ -671,7 +672,7 @@ function TechStackForm({ profile, onProfileChange }: { profile: PortfolioProfile
           <h3>{editId === "new" ? "New Tech Image" : "Edit Tech Image"}</h3>
           <div className="ap-form-grid">
             <div className="ap-field">
-              <label>Technology Name</label>
+              <label>Technology Name <span className="ap-required">*</span></label>
               <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="React.js" required />
             </div>
             <div className="ap-field">
@@ -809,8 +810,9 @@ function ResumeSection({ profile, onProfileUpdate }: {
       const result = await api.parseResume(parseFile);
       setParsed(result);
       notify("Resume parsed! Review and click 'Apply to Portfolio'.");
-    } catch (err: any) {
-      const msg = err?.response?.data?.detail || "Failed to parse resume.";
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { detail?: string } } };
+      const msg = e?.response?.data?.detail || "Failed to parse resume.";
       notify(msg, "error");
     } finally {
       setParsing(false);
@@ -838,8 +840,9 @@ function ResumeSection({ profile, onProfileUpdate }: {
           await api.updateAdminProfile(updates);
         }
       }
-    } catch (err: any) {
-      const msg = err?.response?.data ? JSON.stringify(err.response.data) : String(err);
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: unknown } };
+      const msg = e?.response?.data ? JSON.stringify(e.response.data) : String(err);
       errors.push(`Profile: ${msg}`);
     }
 
@@ -854,8 +857,9 @@ function ResumeSection({ profile, onProfileUpdate }: {
           description: entry.description || "",
           order:       (profile.career_entries?.length ?? 0) + i,
         });
-      } catch (err: any) {
-        const msg = err?.response?.data ? JSON.stringify(err.response.data) : String(err);
+      } catch (err: unknown) {
+        const e = err as { response?: { data?: unknown } };
+        const msg = e?.response?.data ? JSON.stringify(e.response.data) : String(err);
         errors.push(`Career entry "${entry.role || entry.company}": ${msg}`);
       }
     }
@@ -872,8 +876,9 @@ function ResumeSection({ profile, onProfileUpdate }: {
         fd.append("project_url", "");
         fd.append("order",       String((profile.projects?.length ?? 0) + i));
         await api.createProject(fd);
-      } catch (err: any) {
-        const msg = err?.response?.data ? JSON.stringify(err.response.data) : String(err);
+      } catch (err: unknown) {
+        const e = err as { response?: { data?: unknown } };
+        const msg = e?.response?.data ? JSON.stringify(e.response.data) : String(err);
         errors.push(`Project "${proj.title}": ${msg}`);
       }
     }
@@ -908,8 +913,9 @@ function ResumeSection({ profile, onProfileUpdate }: {
           grade:       (edu.grade       || "").slice(0, 100),
           order:       (profile.education_entries?.length ?? 0) + i,
         });
-      } catch (err: any) {
-        const msg = err?.response?.data ? JSON.stringify(err.response.data) : String(err);
+      } catch (err: unknown) {
+        const e = err as { response?: { data?: unknown } };
+        const msg = e?.response?.data ? JSON.stringify(e.response.data) : String(err);
         errors.push(`Education "${edu.degree}": ${msg}`);
       }
     }
@@ -924,8 +930,9 @@ function ResumeSection({ profile, onProfileUpdate }: {
           year:   (cert.year   || "").slice(0, 20),
           order:  (profile.certifications?.length ?? 0) + i,
         });
-      } catch (err: any) {
-        const msg = err?.response?.data ? JSON.stringify(err.response.data) : String(err);
+      } catch (err: unknown) {
+        const e = err as { response?: { data?: unknown } };
+        const msg = e?.response?.data ? JSON.stringify(e.response.data) : String(err);
         errors.push(`Certification "${cert.title}": ${msg}`);
       }
     }
@@ -938,8 +945,9 @@ function ResumeSection({ profile, onProfileUpdate }: {
           text:  (ach.text || "").slice(0, 500),
           order: (profile.achievements?.length ?? 0) + i,
         });
-      } catch (err: any) {
-        const msg = err?.response?.data ? JSON.stringify(err.response.data) : String(err);
+      } catch (err: unknown) {
+        const e = err as { response?: { data?: unknown } };
+        const msg = e?.response?.data ? JSON.stringify(e.response.data) : String(err);
         errors.push(`Achievement: ${msg}`);
       }
     }
@@ -984,12 +992,18 @@ function ResumeSection({ profile, onProfileUpdate }: {
     setGenerating(fmt);
     try {
       const resp = await api.generateResume(fmt);
-      const url = URL.createObjectURL(new Blob([resp.data]));
+      const blob =
+        fmt === "pdf"
+          ? new Blob([resp.data], { type: "application/pdf" })
+          : new Blob([resp.data], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = fmt === "pdf" ? "resume.pdf" : "resume.tex";
+      document.body.appendChild(a);
       a.click();
-      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 200);
       notify(`${fmt.toUpperCase()} resume downloaded!`);
     } catch {
       notify("Failed to generate resume.", "error");
@@ -1345,11 +1359,11 @@ function EducationForm({ profile, onProfileChange }: { profile: PortfolioProfile
           <h3>{editId === "new" ? "New Entry" : "Edit Entry"}</h3>
           <div className="ap-form-grid">
             <div className="ap-field">
-              <label>Degree / Qualification</label>
+              <label>Degree / Qualification <span className="ap-required">*</span></label>
               <input value={form.degree} onChange={(e) => setForm((f) => ({ ...f, degree: e.target.value }))} placeholder="B.Tech Computer Science" required />
             </div>
             <div className="ap-field">
-              <label>Institution</label>
+              <label>Institution <span className="ap-required">*</span></label>
               <input value={form.institution} onChange={(e) => setForm((f) => ({ ...f, institution: e.target.value }))} placeholder="University / School Name" required />
             </div>
             <div className="ap-field">
@@ -1467,7 +1481,7 @@ function CertificationsForm({ profile, onProfileChange }: { profile: PortfolioPr
           <h3>{editId === "new" ? "New Certification" : "Edit Certification"}</h3>
           <div className="ap-form-grid">
             <div className="ap-field">
-              <label>Certificate Title</label>
+              <label>Certificate Title <span className="ap-required">*</span></label>
               <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Full Stack Development" required />
             </div>
             <div className="ap-field">
@@ -1583,7 +1597,7 @@ function AchievementsForm({ profile, onProfileChange }: { profile: PortfolioProf
         <form className="ap-form ap-form-inline" onSubmit={save}>
           <h3>{editId === "new" ? "New Achievement" : "Edit Achievement"}</h3>
           <div className="ap-field">
-            <label>Achievement</label>
+            <label>Achievement <span className="ap-required">*</span></label>
             <textarea value={form.text} onChange={(e) => setForm((f) => ({ ...f, text: e.target.value }))} rows={3} placeholder="Describe your achievement..." required />
           </div>
           <div className="ap-field" style={{ maxWidth: "160px" }}>
@@ -1860,7 +1874,7 @@ function PersonalProjectsForm({ profile, onProfileChange }: { profile: Portfolio
           <h3>{editId === "new" ? "New Project" : "Edit Project"}</h3>
           <div className="ap-form-grid">
             <div className="ap-field">
-              <label>Project Title</label>
+              <label>Project Title <span className="ap-required">*</span></label>
               <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="My Awesome Project" required />
             </div>
             <div className="ap-field">
@@ -1947,22 +1961,22 @@ function PersonalProjectsForm({ profile, onProfileChange }: { profile: Portfolio
 // ─── Main Admin Panel ─────────────────────────────────────────────────────────
 
 const NAV_ITEMS: { id: Section; label: string; icon: string }[] = [
-  { id: "profile", label: "Profile", icon: "👤" },
-  { id: "career", label: "Career", icon: "💼" },
-  { id: "projects", label: "Work / Portfolio", icon: "🗂️" },
-  { id: "personal_projects", label: "My Projects", icon: "🚀" },
-  { id: "whatido", label: "What I Do", icon: "⚙️" },
-  { id: "techstack", label: "Tech Stack", icon: "🔧" },
-  { id: "social", label: "Social & Links", icon: "🔗" },
-  { id: "resume", label: "Resume", icon: "📄" },
-  { id: "education", label: "Education", icon: "🎓" },
-  { id: "certifications", label: "Certifications", icon: "🏆" },
-  { id: "achievements", label: "Achievements", icon: "⭐" },
-  { id: "templates", label: "Templates", icon: "🎨" },
+  { id: "resume",           label: "Resume",          icon: "📄" },
+  { id: "templates",        label: "Templates",        icon: "🎨" },
+  { id: "profile",          label: "Profile",          icon: "👤" },
+  { id: "career",           label: "Career",           icon: "💼" },
+  { id: "projects",         label: "Work / Portfolio", icon: "🗂️" },
+  { id: "whatido",          label: "What I Do",        icon: "⚙️" },
+  { id: "techstack",        label: "Tech Stack",       icon: "🔧" },
+  { id: "social",           label: "Social & Links",   icon: "🔗" },
+  { id: "education",        label: "Education",        icon: "🎓" },
+  { id: "certifications",   label: "Certifications",   icon: "🏆" },
+  { id: "achievements",     label: "Achievements",     icon: "⭐" },
+  { id: "personal_projects",label: "My Projects",      icon: "🚀" },
 ];
 
 export default function AdminPanel() {
-  const [activeSection, setActiveSection] = useState<Section>("profile");
+  const [activeSection, setActiveSection] = useState<Section>("resume");
   const [profile, setProfile] = useState<PortfolioProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const navigate = useNavigate();
@@ -2032,18 +2046,18 @@ export default function AdminPanel() {
             <div className="ap-loading">Loading…</div>
           ) : profile ? (
             <>
+              {activeSection === "resume" && (
+                <ResumeSection profile={profile} onProfileUpdate={setProfile} />
+              )}
+              {activeSection === "templates" && (
+                <TemplatesSection profile={profile} onProfileChange={setProfile} />
+              )}
               {activeSection === "profile" && <ProfileForm profile={profile} />}
               {activeSection === "career" && <CareerForm />}
               {activeSection === "projects" && <ProjectsForm />}
               {activeSection === "whatido" && <WhatIDoForm />}
               {activeSection === "techstack" && <TechStackForm profile={profile} onProfileChange={setProfile} />}
               {activeSection === "social" && <SocialForm profile={profile} />}
-              {activeSection === "resume" && (
-                <ResumeSection
-                  profile={profile}
-                  onProfileUpdate={setProfile}
-                />
-              )}
               {activeSection === "education" && (
                 <EducationForm profile={profile} onProfileChange={setProfile} />
               )}
@@ -2055,9 +2069,6 @@ export default function AdminPanel() {
               )}
               {activeSection === "personal_projects" && (
                 <PersonalProjectsForm profile={profile} onProfileChange={setProfile} />
-              )}
-              {activeSection === "templates" && (
-                <TemplatesSection profile={profile} onProfileChange={setProfile} />
               )}
             </>
           ) : (

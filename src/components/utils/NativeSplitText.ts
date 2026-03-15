@@ -110,7 +110,17 @@ export class SplitText {
       lineEl.className = linesClass;
       const first = spans[0];
       first.parentNode?.insertBefore(lineEl, first);
-      spans.forEach((s) => lineEl.appendChild(s));
+      // Collect ALL nodes from first span to last span (inclusive),
+      // including text-node spaces between word spans so spacing is preserved
+      const lastSpan = spans[spans.length - 1];
+      const nodesToMove: ChildNode[] = [];
+      let cur: ChildNode | null = first;
+      while (cur !== null) {
+        nodesToMove.push(cur);
+        if (cur === lastSpan) break;
+        cur = cur.nextSibling;
+      }
+      nodesToMove.forEach((n) => lineEl.appendChild(n));
       this.lines.push(lineEl);
     });
   }
