@@ -27,6 +27,8 @@ const WhatIDo = () => {
       });
     };
   }, []);
+  const sectionCount = Math.max(sections.length, 1);
+
   return (
     <div className="whatIDO">
       <div className="what-box">
@@ -36,7 +38,10 @@ const WhatIDo = () => {
         </h2>
       </div>
       <div className="what-box">
-        <div className="what-box-in">
+        <div
+          className="what-box-in"
+          style={{ "--section-count": sectionCount } as React.CSSProperties}
+        >
           <div className="what-border2">
             <svg width="100%">
               <line x1="0" y1="0" x2="0" y2="100%" stroke="white" strokeWidth="2" strokeDasharray="7,7" />
