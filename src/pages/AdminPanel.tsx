@@ -20,18 +20,18 @@ import type {
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Section =
+  | "resume"
+  | "templates"
   | "profile"
   | "career"
   | "projects"
   | "whatido"
   | "techstack"
   | "social"
-  | "resume"
   | "education"
   | "certifications"
   | "achievements"
-  | "personal_projects"
-  | "templates";
+  | "personal_projects";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

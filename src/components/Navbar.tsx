@@ -2,43 +2,45 @@ import { useEffect } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
 import "./styles/Navbar.css";
 import { usePortfolio } from "../context/PortfolioContext";
 
-gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
+gsap.registerPlugin(ScrollTrigger);
+
+// Native polyfill matching the ScrollSmoother API used by this project
+export const smoother = {
+  paused: (v: boolean) => {
+    document.body.style.overflow = v ? "hidden" : "auto";
+  },
+  scrollTo: (target: string | null, _animate?: boolean, _position?: string) => {
+    if (!target) return;
+    const el = document.querySelector(target);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  },
+  scrollTop: (y: number) => {
+    window.scrollTo({ top: y, behavior: "instant" as ScrollBehavior });
+  },
+};
 
 const Navbar = () => {
   const { data } = usePortfolio();
   useEffect(() => {
-    smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
-      effects: true,
-      autoResize: true,
-      ignoreMobileResize: true,
-    });
-
     smoother.scrollTop(0);
     smoother.paused(true);
 
-    let links = document.querySelectorAll(".header ul a");
+    const links = document.querySelectorAll(".header ul a");
     links.forEach((elem) => {
-      let element = elem as HTMLAnchorElement;
+      const element = elem as HTMLAnchorElement;
       element.addEventListener("click", (e) => {
         if (window.innerWidth > 1024) {
           e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
+          const section = element.getAttribute("data-href");
           smoother.scrollTo(section, true, "top top");
         }
       });
     });
     window.addEventListener("resize", () => {
-      ScrollSmoother.refresh(true);
+      ScrollTrigger.refresh();
     });
   }, []);
   return (
