@@ -28,6 +28,7 @@ dist-ssr
 # ── Environment / secrets (NEVER commit these) ────────────────────────────────
 .env
 .env.*
+!.env.production
 !.env.example
 backend/.env
 backend/.env.*
