@@ -5,6 +5,22 @@ import { usePortfolio } from "../context/PortfolioContext";
 const Contact = () => {
   const { data } = usePortfolio();
 
+  // Use latest career entry if available, otherwise latest education entry
+  const latestCareer = data?.career_entries?.length
+    ? [...data.career_entries].sort((a, b) => (b.order ?? 0) - (a.order ?? 0))[0]
+    : null;
+  const latestEducation = data?.education_entries?.length
+    ? [...data.education_entries].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))[0]
+    : null;
+
+  const currentLabel = latestCareer
+    ? `${latestCareer.role} at ${latestCareer.company}`
+    : latestEducation
+    ? `${latestEducation.degree}${latestEducation.institution ? ` at ${latestEducation.institution}` : ""}`
+    : data?.education ?? "";
+
+  const currentHeading = latestCareer ? "Currently" : "Education";
+
   return (
     <div className="contact-section section-container" id="contact">
       <div className="contact-container">
@@ -17,8 +33,8 @@ const Contact = () => {
                 {data?.email}
               </a>
             </p>
-            <h4>Education</h4>
-            <p>{data?.education}</p>
+            <h4>{currentHeading}</h4>
+            <p>{currentLabel}</p>
           </div>
           <div className="contact-box">
             <h4>Social</h4>

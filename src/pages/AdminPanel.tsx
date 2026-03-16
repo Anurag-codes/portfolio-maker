@@ -74,6 +74,8 @@ function TextPreview({ text, maxLen = 200 }: { text: string; maxLen?: number }) 
 function DomainHelp({ slug }: { slug: string }) {
   const [open, setOpen] = useState(false);
   const platformDomain = import.meta.env.VITE_MAIN_DOMAIN || "dotdevz.com";
+  const serverIp = "195.35.22.92";
+  const subdomainUrl = slug ? `https://${slug}.${platformDomain}` : `https://username.${platformDomain}`;
 
   return (
     <div className="ap-domain-help">
@@ -83,7 +85,7 @@ function DomainHelp({ slug }: { slug: string }) {
         onClick={() => setOpen((v) => !v)}
       >
         <span>{open ? "▾" : "▸"}</span>
-        How to set up your domains
+        How to share your portfolio on a custom link
       </button>
 
       {open && (
@@ -91,95 +93,102 @@ function DomainHelp({ slug }: { slug: string }) {
 
           {/* ── Free subdomain ── */}
           <section className="ap-dh-section">
-            <h4>① Free subdomain — <code>{slug || "username"}.{platformDomain}</code></h4>
-            <p>This is <strong>already active</strong>. No action needed.</p>
-            <ol>
-              <li>Your portfolio is live at exactly the URL shown in the banner above.</li>
-              <li>Share it directly — anyone who opens it sees only your portfolio.</li>
-            </ol>
-            <div className="ap-dh-note">
-              <strong>You (the admin)</strong> need to do this <strong>once</strong> on the server:
-              <code className="ap-dh-code">
-                # 1. DNS — add wildcard A record<br />
-                *.{platformDomain}  →  your-server-ip<br />
-                <br />
-                # 2. Nginx wildcard TLS cert (interactive — needs DNS TXT record)<br />
-                sudo bash deploy/setup-ssl.sh wildcard
-              </code>
+            <h4>① Your free subdomain — already active ✓</h4>
+            <p>
+              Your portfolio is live at:&nbsp;
+              <a href={subdomainUrl} target="_blank" rel="noopener noreferrer">
+                <code>{subdomainUrl}</code>
+              </a>
+            </p>
+            <p>
+              Just share this link — anyone who opens it sees <strong>only your portfolio</strong>,
+              no login required.
+            </p>
+            <div className="ap-dh-note ap-dh-note--tip">
+              <strong>Not working?</strong> The wildcard DNS record may not be set up yet.
+              Ask the admin to add this DNS record (one-time, already done on this server):
+              <table className="ap-dh-table" style={{ marginTop: "0.5rem" }}>
+                <thead><tr><th>Type</th><th>Name</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><code>A</code></td>
+                    <td><code>*.portfolio</code></td>
+                    <td><code>{serverIp}</code></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
           {/* ── Custom domain ── */}
           <section className="ap-dh-section">
-            <h4>② Custom domain — <code>johndoe.com</code></h4>
-            <p>Use your own domain to show <em>your portfolio only</em>. Three steps:</p>
+            <h4>② Use your own domain — e.g. <code>johndoe.com</code></h4>
+            <p>
+              Want <code>johndoe.com</code> to show your portfolio? Three steps — <strong>you do
+              steps 1 &amp; 2</strong>, step 3 is automatic:
+            </p>
             <ol>
               <li>
-                <strong>Enter your domain above</strong> (e.g. <code>johndoe.com</code>) and click
-                Save Profile.
+                <strong>Enter your domain in the "Custom Domain" field above</strong> and click
+                <strong> Save Profile</strong>. This triggers automatic SSL + nginx setup on
+                the server.
               </li>
               <li>
-                <strong>Add a DNS record</strong> at your domain registrar / DNS provider:
+                <strong>Add a DNS A record</strong> at your domain registrar (GoDaddy, Namecheap,
+                Hostinger, etc.):
                 <table className="ap-dh-table">
                   <thead>
-                    <tr><th>Type</th><th>Name / Host</th><th>Value</th><th>TTL</th></tr>
+                    <tr><th>Type</th><th>Name / Host</th><th>Value / Points to</th><th>TTL</th></tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td><code>CNAME</code></td>
-                      <td><code>@</code> <em>(or your domain)</em></td>
-                      <td><code>{platformDomain}</code></td>
-                      <td>Auto / 3600</td>
-                    </tr>
-                    <tr>
-                      <td colSpan={4} className="ap-dh-or">
-                        — or if your registrar doesn't allow CNAME at root —
-                      </td>
+                      <td><code>A</code></td>
+                      <td><code>@</code> <em>(root domain)</em></td>
+                      <td><code>{serverIp}</code></td>
+                      <td>300</td>
                     </tr>
                     <tr>
                       <td><code>A</code></td>
-                      <td><code>@</code></td>
-                      <td><em>your-server-ip</em></td>
-                      <td>Auto / 3600</td>
+                      <td><code>www</code></td>
+                      <td><code>{serverIp}</code></td>
+                      <td>300</td>
                     </tr>
                   </tbody>
                 </table>
-                DNS changes propagate in minutes to 48 hours.
+                DNS changes take a few minutes up to 48 hours to propagate worldwide.
               </li>
               <li>
-                <strong>Add SSL for the domain</strong> — run this on the server:
-                <code className="ap-dh-code">
-                  sudo bash deploy/setup-ssl.sh add-custom johndoe.com
-                </code>
-                The script gets a free Let's Encrypt certificate and prints the nginx block to add.
-                Until that's done, browsers will show a certificate warning (self-signed fallback).
+                <strong>SSL certificate is issued automatically</strong> — once you save your
+                domain in step 1, the server runs certbot and configures nginx with a free
+                Let's Encrypt certificate. No manual action needed.
+                <br />
+                <em>Until the certificate is ready, browsers may show a security warning — this
+                clears automatically within a minute of saving.</em>
               </li>
             </ol>
             <div className="ap-dh-note ap-dh-note--tip">
-              <strong>Using Cloudflare?</strong> If your domain is on Cloudflare, enable the
-              orange-cloud proxy. Cloudflare handles SSL automatically — skip step 3.
-              Just point the CNAME to <code>{platformDomain}</code> with the proxy turned on.
+              <strong>Using Cloudflare?</strong> Add an <code>A</code> record pointing to{" "}
+              <code>{serverIp}</code> with the <strong>orange cloud proxy disabled</strong> (DNS
+              only / grey cloud). Cloudflare proxy can interfere with SSL certificate issuance.
+              Once the cert is issued you can re-enable the proxy if you wish.
             </div>
           </section>
 
           {/* ── How it works ── */}
           <section className="ap-dh-section">
-            <h4>③ How it works (technical overview)</h4>
+            <h4>③ How routing works</h4>
             <ul>
               <li>
-                <strong>Subdomain:</strong> Nginx's wildcard block <code>*.{platformDomain}</code>
-                catches the request. The frontend detects the subdomain and calls
-                <code>/api/portfolio/by-host/</code>, which resolves it to your profile.
+                <strong>Subdomain</strong> (<code>{slug || "username"}.{platformDomain}</code>):
+                The server's wildcard nginx block catches any <code>*.{platformDomain}</code>
+                request, serves the React app, which then calls the API with your slug to load
+                your data.
               </li>
               <li>
-                <strong>Custom domain:</strong> Nginx catch-all block receives the request, passes
-                <code>Host: {platformDomain}</code> to Django (so <code>ALLOWED_HOSTS</code> always
-                passes) and sets <code>X-Custom-Domain: johndoe.com</code>. The Django view reads
-                that header and looks up the matching profile.
-              </li>
-              <li>
-                <strong>Routing is 100% automatic</strong> after the DNS record points to this
-                server. No code changes, no redeploy.
+                <strong>Custom domain</strong> (<code>johndoe.com</code>):
+                Nginx receives the request, tells Django the real hostname via a header, and
+                Django looks up your profile by the saved custom domain. Fully automatic after
+                DNS propagation.
               </li>
             </ul>
           </section>
